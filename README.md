@@ -6,13 +6,13 @@
 
 $Loss = (y_{real}-y_{pred})^2 = (y_{real}-ax^2-bx-c)^2$
 
-链式法则对参数分别求导:
+**链式法则**对参数分别求导:
 
-$\frac{\partial{L}}{\partial{a}} = -2x^2(y_{real}-ax^2-bx-c)$
+$\frac{\partial{L}}{\partial{a}} = -\frac{2}{N}\sum_{i=1}^Nx^2(y_{real}-ax^2-bx-c) = -\frac{2}{N}\sum_{i=1}^Nx^2(y_{real}-y_{pred})$
 
-$\frac{\partial{L}}{\partial{b}} = -2x(y_{real}-ax^2-bx-c)$
+$\frac{\partial{L}}{\partial{b}} = -\frac{2}{N}\sum_{i=1}^Nx(y_{real}-ax^2-bx-c) = -\frac{2}{N}\sum_{i=1}^Nx(y_{real}-y_{pred}c)$
 
-$\frac{\partial{L}}{\partial{c}} = -2(y_{real}-ax^2-bx-c)$
+$\frac{\partial{L}}{\partial{c}} = -\frac{2}{N}\sum_{i=1}^N(y_{real}-ax^2-bx-c) = -\frac{2}{N}\sum_{i=1}^N(y_{real}-y_{pred}) $
 
 # 生成数据
 
@@ -24,6 +24,7 @@ x =  np.arange(-10,10,0.1)
 y = x**2 + 2*x+8 +np.random.normal(0,1,size=x.shape)
 plt.plot(x,y)
 ```
+![da](https://github.com/Tony980624/Gradient-descent/blob/main/output.png)
 
 # 梯度下降函数
 
@@ -40,11 +41,11 @@ def gradient_descent(initial_theta,learning_rate,iterations):
         #当前参数下的总误差
         MSE = np.mean((y_pred - y_real)**2)
         losses.append(MSE)
-        error = y_pred - y_real
+        error = y_real - y_pred
         # a的梯度
-        gradient_a = 2*np.mean(error*x**2)
-        gradient_b = 2*np.mean(error*x)
-        gradient_c = 2*np.mean(error)
+        gradient_a = -2*np.mean(error*x**2)
+        gradient_b = -2*np.mean(error*x)
+        gradient_c = -2*np.mean(error)
         # 根据学习率更新参数
         a = a -learning_rate*gradient_a
         b = b- learning_rate*gradient_b
@@ -55,4 +56,12 @@ def gradient_descent(initial_theta,learning_rate,iterations):
 
 # 查看损失的变化
 
+![da](https://github.com/Tony980624/Gradient-descent/blob/main/output2.png)
+
+损失下降的很快
+
 # 查看三个参数的迭代变化
+
+![da](https://github.com/Tony980624/Gradient-descent/blob/main/output3.png)
+
+看到参数无线逼近正确答案a=1,b=2,c=8
